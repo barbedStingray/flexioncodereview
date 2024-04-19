@@ -1,23 +1,46 @@
-import logo from './logo.svg';
+import { useState } from 'react'; 
+import UnitConverter from './UnitConverter';
 import './App.css';
 
+
+
+
 function App() {
+
+  const [temperatureUnits, setTemperatureUnits] = useState([
+    'Celsius',
+    'Fahrenheit', 
+    'Kelvin', 
+    'Rankine'
+  ]);
+
+  const [volumeUnits, setVolumeUnits] = useState([
+    'Cubic-Feet', 
+    'Cubic-Inches', 
+    'Cups', 
+    'Gallons', 
+    'Liters', 
+    'Tablespoons'
+  ]);
+
+  
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="flexionCodeReview">
+
+      <h1>Flexion Code Reiview</h1>
+
+      <UnitConverter 
+        title={'Temperature'}
+        units={temperatureUnits}
+      />
+
+      <UnitConverter 
+        title={'Volume'}
+        units={volumeUnits}
+      />
+
     </div>
   );
 }
