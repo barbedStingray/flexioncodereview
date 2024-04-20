@@ -1,13 +1,13 @@
 import React from 'react';
 
 
-const ValueInput = ({ setFunction, value, placeholder }) => {
+const ValueInput = ({ setFunction, keyPair, value, placeholder }) => {
     return (
         <input
             type='text'
             placeholder={placeholder}
             value={value}
-            onChange={(e) => setFunction(e.target.value)}
+            onChange={(e) => setFunction(`${keyPair}`)(e)}
         />
     )
 }

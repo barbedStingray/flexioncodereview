@@ -1,18 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ValueInput from './Components/ValueInput';
 import SelectUnit from './Components/SelectUnit';
 
 
 
 
-
-const UnitConverter = ({ title, units }) => {
-
-    const [question, setQuestion] = useState('');
-    const [studentAnswer, setStudentAnswer] = useState('');
-    const [correctAnswer, setCorrectAnswer] = useState('')
-    const [startUnit, setStartUnit] = useState('Celsius');
-    const [targetUnit, setTargetUnit] = useState('Celsius');
+const UnitConverter = ({
+    title, units,
+    correctAnswer, setCorrectAnswer,
+    questionInputs, setQuestionInputs }) => {
 
 
     const volumeUnitConversions = {
@@ -94,8 +90,10 @@ const UnitConverter = ({ title, units }) => {
     }
 
     function convertTemperatures() {
-        console.log('convertTemperatures', question, startUnit, targetUnit);
-
+        console.log('convertTemperatures', questionInputs.promptNum, questionInputs.startUnit, questionInputs.targetUnit);
+        const startUnit = questionInputs.startUnit;
+        const targetUnit = questionInputs.targetUnit;
+        const promptNum = questionInputs.promptNum;
         // get string equation
         const stringEquation = temperatureUnitConversions[`${startUnit}`][`${targetUnit}`];
         console.log('stringEquation', stringEquation);
@@ -104,15 +102,20 @@ const UnitConverter = ({ title, units }) => {
         const equationFunction = new Function('x', `return ${stringEquation}`);
 
         // run string function with Question value
-        const correctTemp = equationFunction(Number(question));
+        const correctTemp = equationFunction(Number(promptNum));
         console.log(correctTemp);
+
+        // return correctTemp;
         setCorrectAnswer(correctTemp.toFixed(1));
     }
 
     function convertVolumes() {
-        console.log('convertVolumes', question, startUnit, targetUnit);
+        console.log('convertVolume', questionInputs.promptNum, questionInputs.startUnit, questionInputs.targetUnit);
+        const startUnit = questionInputs.startUnit;
+        const targetUnit = questionInputs.targetUnit;
+        const promptNum = questionInputs.promptNum;
 
-        const correctVolume = Number(question) * volumeUnitConversions[`${startUnit}`][`${targetUnit}`];
+        const correctVolume = Number(promptNum) * volumeUnitConversions[`${startUnit}`][`${targetUnit}`];
         console.log('correctVolume', correctVolume);
         setCorrectAnswer(correctVolume.toFixed(1));
     }
@@ -121,21 +124,25 @@ const UnitConverter = ({ title, units }) => {
         return !isNaN(Number(str));
     }
 
+    const handleInputChanges = (key) => (e) => {
+        setQuestionInputs({ ...questionInputs, [key]: e.target.value })
+    }
 
-    function submitConversion(e, question, studentAnswer, startUnit, targetUnit) {
+    function submitConversion(e, promptNum, studentAnswer, startUnit, targetUnit) {
         e.preventDefault();
-        console.log('submitConversion', question, studentAnswer, startUnit, targetUnit);
+        console.log('submitConversion', promptNum, studentAnswer, startUnit, targetUnit);
 
-        // ! allows the box to be filled in with text
+        // ! allows the input box to be filled in with text
         const studentString = e.target.value;
-        setStudentAnswer(studentString);
+        setQuestionInputs({ ...questionInputs, ['studentAnswer']: studentString });
+        // setStudentAnswer(studentString);
 
         // if either return false, function will cease
-        const firstInput = validateInputs(question);
+        const firstInput = validateInputs(promptNum);
         const secondInput = validateInputs(studentString);
 
 
-        if (question.length === 0 && studentAnswer.length === 0) {
+        if (promptNum.length === 0) {
             console.log('inputs are not full yet');
             return
 
@@ -165,35 +172,41 @@ const UnitConverter = ({ title, units }) => {
 
 
 
+
     return (
 
         <div className='unitConverter'>
             <h1>{title}</h1>
 
+            {JSON.stringify(questionInputs)}
+
             <div>
                 <form>
                     <ValueInput
-                        setFunction={setQuestion}
-                        value={question}
+                        setFunction={handleInputChanges}
+                        keyPair={'promptNum'}
+                        value={questionInputs.promptNum}
                         placeholder={'Initial Value'}
                     />
 
                     <SelectUnit
                         units={units}
-                        setFunction={setStartUnit}
+                        keyPair={'startUnit'}
+                        setFunction={handleInputChanges}
                     />
-
                     <SelectUnit
                         units={units}
-                        setFunction={setTargetUnit}
+                        keyPair={'targetUnit'}
+                        setFunction={handleInputChanges}
                     />
-
                     <input
                         type='text'
                         placeholder='studentAnswer'
-                        value={studentAnswer}
-                        onChange={(e) => submitConversion(e, question, studentAnswer, startUnit, targetUnit)}
+                        value={questionInputs.studentAnswer}
+                        onChange={(e) => submitConversion(e, questionInputs.promptNum, questionInputs.studentAnswer, questionInputs.startUnit, questionInputs.targetUnit)}
                     />
+
+
                     {/* !! Not sure why I can't component this !! */}
                     {/* <ValueInput
                         setFunction={submitConversion}
@@ -202,13 +215,11 @@ const UnitConverter = ({ title, units }) => {
                     /> */}
 
                     {JSON.stringify(correctAnswer)}
-                    {JSON.stringify(studentAnswer)}
-
-                    {/* <button type='submit'>Check</button> */}
-
+                    {JSON.stringify(questionInputs.studentAnswer)}
 
                 </form>
-                {studentAnswer === correctAnswer ?
+
+                {questionInputs.studentAnswer === correctAnswer ?
                     (<div><p>Correct</p></div>)
                     :
                     (<div><p>NO</p></div>)
