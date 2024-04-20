@@ -5,6 +5,7 @@ import SelectUnit from './Components/SelectUnit';
 
 
 
+
 const UnitConverter = ({ title, units }) => {
 
     const [question, setQuestion] = useState('');
@@ -116,35 +117,34 @@ const UnitConverter = ({ title, units }) => {
         setCorrectAnswer(correctVolume.toFixed(1));
     }
 
-    function validateInputs() {
-        console.log('validateInputs');
+    function validateInputs(str) {
+        return !isNaN(Number(str));
     }
-
-
 
 
     function submitConversion(e, question, studentAnswer, startUnit, targetUnit) {
         e.preventDefault();
-        console.log('submitConversion', question, startUnit, targetUnit);
+        console.log('submitConversion', question, studentAnswer, startUnit, targetUnit);
 
+        // ! allows the box to be filled in with text
+        const studentString = e.target.value;
+        setStudentAnswer(studentString);
 
-        // todo verify data accurate numbers
+        // if either return false, function will cease
+        const firstInput = validateInputs(question);
+        const secondInput = validateInputs(studentString);
 
-        console.log('stringlength', question.length);
 
         if (question.length === 0 && studentAnswer.length === 0) {
             console.log('inputs are not full yet');
             return
 
-            // another if else that evaluates to true/false for function
-            // verifying numerical values
+        } else if (firstInput === false || secondInput === false) {
+            console.log('im sorry, check your inputs');
+            return
 
         } else if (title === 'Temperature') {
             console.log('title is Temperature');
-
-            // ! allows the box to be filled in with text
-            const studentString = e.target.value;
-            setStudentAnswer(studentString);
 
             convertTemperatures();
             return
@@ -152,18 +152,15 @@ const UnitConverter = ({ title, units }) => {
         } else if (title === 'Volume') {
             console.log('title is Volume');
 
-            const studentString = e.target.value;
-            setStudentAnswer(studentString);
-
             convertVolumes();
             return
 
         } else {
-            console.log('inputs full, run code');
+            console.log('something fishy is going on here...');
             return
         }
 
-        
+
     }
 
 
@@ -210,13 +207,14 @@ const UnitConverter = ({ title, units }) => {
                     {/* <button type='submit'>Check</button> */}
 
 
-                    {studentAnswer === correctAnswer ?
-                        (<div><p>Correct</p></div>)
-                        :
-                        (<div><p>NO</p></div>)
-                    }
-
                 </form>
+                {studentAnswer === correctAnswer ?
+                    (<div><p>Correct</p></div>)
+                    :
+                    (<div><p>NO</p></div>)
+                }
+
+
             </div>
         </div>
     )
