@@ -66,32 +66,104 @@ const UnitConverter = ({ title, units }) => {
     }
 
     const temperatureUnitConversions = {
+        Celsius: {
+            Celsius: 'x',
+            Fahrenheit: '(x * 9/5) + 32',
+            Kelvin: 'x + 273.15',
+            Rankine: 'x * 9/5 + 491.67'
+        },
         Fahrenheit: {
-            
-        }
+            Celsius: '(x - 32) * 5/9',
+            Fahrenheit: 'x',
+            Kelvin: '(x - 32) * 5/9 + 273.15',
+            Rankine: 'x + 459.67'
+        },
+        Kelvin: {
+            Celsius: 'x - 273.15',
+            Fahrenheit: '(x - 273.15) * 9/5 + 32',
+            Kelvin: 'x',
+            Rankine: 'x * 1.8'
+        },
+        Rankine: {
+            Celsius: '(x - 491.67) * 5/9',
+            Fahrenheit: 'x - 459.67',
+            Kelvin: 'x * 5/9',
+            Rankine: 'x'
+        },
+    }
+
+    function convertTemperatures() {
+        console.log('convertTemperatures', question, startUnit, targetUnit);
+
+        // get string equation
+        const stringEquation = temperatureUnitConversions[`${startUnit}`][`${targetUnit}`];
+        console.log('stringEquation', stringEquation);
+
+        // implement function() constructor
+        const equationFunction = new Function('x', `return ${stringEquation}`);
+
+        // run string function with Question value
+        const correctTemp = equationFunction(Number(question));
+        console.log(correctTemp);
+        setCorrectAnswer(correctTemp.toFixed(1));
+    }
+
+    function convertVolumes() {
+        console.log('convertVolumes', question, startUnit, targetUnit);
+
+        const correctVolume = Number(question) * volumeUnitConversions[`${startUnit}`][`${targetUnit}`];
+        console.log('correctVolume', correctVolume);
+        setCorrectAnswer(correctVolume.toFixed(1));
+    }
+
+    function validateInputs() {
+        console.log('validateInputs');
     }
 
 
-    // todo verify data accurate numbers
 
 
-    function submitConversion(e, question, startUnit, targetUnit) {
+    function submitConversion(e, question, studentAnswer, startUnit, targetUnit) {
         e.preventDefault();
-        console.log('checking answer', question, startUnit, targetUnit);
-
-        // Student Number convert
-        const studentNum = Number(e.target.value);
-        setStudentAnswer(e.target.value);
+        console.log('submitConversion', question, startUnit, targetUnit);
 
 
+        // todo verify data accurate numbers
 
+        console.log('stringlength', question.length);
 
+        if (question.length === 0 && studentAnswer.length === 0) {
+            console.log('inputs are not full yet');
+            return
 
-        // question conversion begins
-        const numValue = Number(question);
-        // todo if statement volume vs Temperature
-        const correctNumber = numValue * volumeUnitConversions[`${startUnit}`][`${targetUnit}`];
-        setCorrectAnswer(correctNumber.toFixed(2));
+            // another if else that evaluates to true/false for function
+            // verifying numerical values
+
+        } else if (title === 'Temperature') {
+            console.log('title is Temperature');
+
+            // ! allows the box to be filled in with text
+            const studentString = e.target.value;
+            setStudentAnswer(studentString);
+
+            convertTemperatures();
+            return
+
+        } else if (title === 'Volume') {
+            console.log('title is Volume');
+
+            const studentString = e.target.value;
+            setStudentAnswer(studentString);
+
+            convertVolumes();
+            return
+
+        } else {
+            console.log('inputs full, run code');
+            return
+        }
+
+        
     }
 
 
@@ -123,8 +195,9 @@ const UnitConverter = ({ title, units }) => {
                         type='text'
                         placeholder='studentAnswer'
                         value={studentAnswer}
-                        onChange={(e) => submitConversion(e, question, startUnit, targetUnit)}
+                        onChange={(e) => submitConversion(e, question, studentAnswer, startUnit, targetUnit)}
                     />
+                    {/* !! Not sure why I can't component this !! */}
                     {/* <ValueInput
                         setFunction={submitConversion}
                         value={studentAnswer}
@@ -132,6 +205,10 @@ const UnitConverter = ({ title, units }) => {
                     /> */}
 
                     {JSON.stringify(correctAnswer)}
+                    {JSON.stringify(studentAnswer)}
+
+                    {/* <button type='submit'>Check</button> */}
+
 
                     {studentAnswer === correctAnswer ?
                         (<div><p>Correct</p></div>)

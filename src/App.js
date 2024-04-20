@@ -7,7 +7,7 @@ import './App.css';
 
 function App() {
 
-  const [display, setDisplay] = useState(false);
+  const [display, setDisplay] = useState(true);
 
   const [temperatureUnits, setTemperatureUnits] = useState([
     'Celsius',
