@@ -1,17 +1,17 @@
 import React from 'react';
 
-const SelectUnit = ({ units, keyPair, setFunction }) => {
-
+const SelectUnit = ({ units, keyPair, setFunction, value }) => {
 
     return (
         <select
-            onChange={(e) => setFunction(`${keyPair}`)(e)}
+            name={keyPair}
+            onChange={(e) => setFunction(e)}
+            value={value}
         >
             {units.map((unit, i) => (
-                <option
-                    key={i}
-                    value={unit}
-                >{unit}</option>
+                <option key={i} value={unit}>
+                    {unit}
+                </option>
             ))}
         </select>
     )
