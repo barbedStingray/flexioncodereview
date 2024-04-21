@@ -7,9 +7,10 @@ const SelectUnit = ({ units, keyPair, setFunction, value }) => {
             name={keyPair}
             onChange={(e) => setFunction(e)}
             value={value}
+            className='selectField'
         >
             <option value={''}>
-                Select Unit
+                {units[0] === 'Celsius' ? 'Temperature' : 'Volume'}
             </option>
             {units.map((unit, i) => (
                 <option key={i} value={unit}>

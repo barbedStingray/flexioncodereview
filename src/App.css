@@ -4,13 +4,147 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: school;
+  src: url('./Fonts/penmanshipLedger.ttf');
+}
+
+:root {
+  /* border: 2px solid yellow; */
+  background-image: url('./Images/books.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
 .flexionCodeReview {
-  border: 2px solid red;
+  /* border: 2px solid red; */
   width: 100vw;
   height: 100vh;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  padding-left: 26vw;
+
+}
+
+.conversionSpace {
+  /* border: 2px solid magenta; */
+  height: 75vh;
+  width: 55vw;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.unitTabs {
+  /* border: 2px solid lime; */
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 2.75vh;
+  color: rgb(255, 255, 255);
+}
+
+.unitDiv {
+  /* border: 2px solid purple; */
+  padding: 0.45vw;
+  cursor: pointer;
+}
+.highlight {
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 0 0 5px black;
 }
 
 .unitConverter {
-  border: 2px solid blue;
+  /* border: 2px solid blue; */
+  display: flex;
+  flex: 8;
+  /* flex-flow: column nowrap; */
 }
 
+.conversionForm {
+  /* border: 2px solid yellow; */
+  width: 100%;
+  padding: 3vh 0;
+  display: flex;
+  /* flex: 7; */
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputField,
+.screenMessageDiv {
+  /* border: 2px solid red; */
+  width: 80%;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.textField,
+.selectField {
+  /* border: 2px solid blue; */
+  /* height: 75%; */
+  height: 6vh;
+  text-align: center;
+  border-radius: 10px;
+  border: none;
+  background-color: #00000044;
+  color: white;
+}
+.arrows {
+  font-size: 5vh;
+  color: white;
+  flex: 0.5;
+}
+.solution {
+  /* border: 2px solid green; */
+  flex: 0.5;
+  font-size: 2.5vh;
+  color: white;
+}
+
+.textField {
+  width: 45%;
+  box-shadow: 0 0 5px #00000099 inset;
+  font-size: 3.25vh;
+}
+
+.selectField {
+  width: 65%;
+  font-size: 3vh;
+  border: 1px solid black;
+}
+
+.message {
+  width: 90%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  font-size: 3vh;
+  padding: 0.5vh;
+  text-align: center;
+  background-clip: content-box;
+  color: white;
+}
+.warning {
+  border: 3px solid #ffd700;
+  background-color: #ffd90030;
+}
+.correct {
+  border: 3px solid #00af00;
+  background-color: #00af0030;
+}
+.incorrect {
+  border: 3px solid red;
+  background-color: #ff000030;
+}

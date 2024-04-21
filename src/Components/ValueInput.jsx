@@ -10,6 +10,7 @@ const ValueInput = ({ setFunction, keyPair, value, placeholder }) => {
             placeholder={placeholder}
             value={value}
             onChange={(e) => setFunction(e)}
+            className='textField'
         />
     )
 }

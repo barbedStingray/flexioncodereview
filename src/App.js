@@ -5,8 +5,11 @@ import './App.css';
 
 function App() {
 
-  const [display, setDisplay] = useState(true);
-
+  const [display, setDisplay] = useState('Temperature');
+  const titles = [
+    'Temperature',
+    'Volume',
+  ];
 
   const temperatureLibrary = {
     title: 'Temperature',
@@ -105,18 +108,21 @@ function App() {
     }
   };
 
-
-
-
   return (
     <div className="flexionCodeReview">
 
-      <h1>Flexion Code Reiview</h1>
+      <div className='conversionSpace'>
+        <div className='unitTabs'>
+          {titles.map((title, i) => (
+            <div
+              key={i}
+              onClick={() => setDisplay(title)}
+              className={title === display ? 'unitDiv highlight' : 'unitDiv'}> <h1>{title}</h1>
+          </div>
+        ))}
+      </div>
 
-      <div onClick={() => setDisplay(true)}><h3>Temperature</h3></div>
-      <div onClick={() => setDisplay(false)}><h3>Volume</h3></div>
-
-      {display ?
+      {display === "Temperature" ?
         <UnitConverter
           title={'Temperature'}
           library={temperatureLibrary}
@@ -127,8 +133,9 @@ function App() {
           library={volumeLibrary}
         />
       }
-
     </div>
+
+    </div >
   );
 }
 
