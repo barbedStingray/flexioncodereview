@@ -12,16 +12,8 @@ function App() {
     'Volume',
   ]);
 
-  const [correctAnswer, setCorrectAnswer] = useState('');
-  const [questionInputs, setQuestionInputs] = useState({
-    promptNum: '',
-    studentAnswer: '',
-    startUnit: '',
-    targetUnit: ''
-  });
 
-  // ! These should not be changing
-  const [temperatureLibrary, setTemperatureLibrary] = useState({
+  const temperatureLibrary = {
     title: 'Temperature',
     units: [
       'Celsius',
@@ -55,8 +47,8 @@ function App() {
         Rankine: 'x'
       },
     }
-  });
-  const [volumeLibrary, setVolumeLibray] = useState({
+  };
+  const volumeLibrary = {
     title: 'Volume',
     units: [
       'CubicFeet',
@@ -116,7 +108,7 @@ function App() {
         Tablespoons: 1,
       },
     }
-  });
+  };
 
 
 
@@ -134,19 +126,15 @@ function App() {
       {display ?
         <UnitConverter
           title={'Temperature'}
-          correctAnswer={correctAnswer} setCorrectAnswer={setCorrectAnswer}
-          questionInputs={questionInputs} setQuestionInputs={setQuestionInputs}
           library={temperatureLibrary}
         />
         :
         <UnitConverter
           title={'Volume'}
-          questionInputs={questionInputs} setQuestionInputs={setQuestionInputs}
-          correctAnswer={correctAnswer} setCorrectAnswer={setCorrectAnswer}
           library={volumeLibrary}
-
         />
       }
+
     </div>
   );
 }

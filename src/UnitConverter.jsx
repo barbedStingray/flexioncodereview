@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ValueInput from './Components/ValueInput';
 import SelectUnit from './Components/SelectUnit';
 
 
-// todo move here
 
+const UnitConverter = ({ title, library }) => {
 
-const UnitConverter = ({
-    title,
-    correctAnswer, setCorrectAnswer,
-    questionInputs, setQuestionInputs,
-    library }) => {
+    const [correctAnswer, setCorrectAnswer] = useState('');
+    const [questionInputs, setQuestionInputs] = useState({
+        promptNum: '',
+        studentAnswer: '',
+        startUnit: '',
+        targetUnit: ''
+    });
+
 
     const unitConversions = library.conversions;
     const selectUnits = library.units;
@@ -53,9 +56,8 @@ const UnitConverter = ({
     const handleInputChanges = (e) => {
         const { name, value } = e.target;
         // console.log('e', e.target);
-        console.log('name', name);
-        console.log('value', value);
-        // setQuestionInputs({ ...questionInputs, [key]: e.target.value })
+        // console.log('name', name);
+        // console.log('value', value);
         setQuestionInputs({ ...questionInputs, [name]: value })
     }
 
@@ -66,7 +68,6 @@ const UnitConverter = ({
         // ! allows the input box to be filled in with text
         const studentString = e.target.value;
         setQuestionInputs({ ...questionInputs, ['studentAnswer']: studentString });
-        // setStudentAnswer(studentString);
 
         // if either return false, function will cease
         const firstInput = validateInputs(promptNum);
@@ -84,12 +85,14 @@ const UnitConverter = ({
         } else if (title === 'Temperature') {
             console.log('title is Temperature');
 
+            // testConvertTemperatures(promptNum, startUnit, targetUnit, unitConversions, setCorrectAnswer);
             convertTemperatures();
             return
 
         } else if (title === 'Volume') {
             console.log('title is Volume');
 
+            // testConvertVolumes(promptNum, startUnit, targetUnit, unitConversions, setCorrectAnswer);
             convertVolumes();
             return
 
@@ -101,13 +104,21 @@ const UnitConverter = ({
 
     useEffect(() => {
         console.log(title);
-        setQuestionInputs({
-            promptNum: '',
-            studentAnswer: '',
-            startUnit: '',
-            targetUnit: ''
-        });
-
+        if (title === 'Temperature') {
+            setQuestionInputs({
+                promptNum: '',
+                studentAnswer: '',
+                startUnit: 'Celsius',
+                targetUnit: 'Celsius'
+            });
+        } else if (title === 'Volume') {
+            setQuestionInputs({
+                promptNum: '',
+                studentAnswer: '',
+                startUnit: 'CubicFeet',
+                targetUnit: 'CubicFeet'
+            });
+        }
     }, [title]);
 
 
@@ -144,7 +155,7 @@ const UnitConverter = ({
                         type='text'
                         placeholder='studentAnswer'
                         value={questionInputs.studentAnswer}
-                        onChange={(e) => submitConversion(e, questionInputs.promptNum, questionInputs.studentAnswer, questionInputs.startUnit, questionInputs.targetUnit)}
+                        onChange={(e) => submitConversion(e, questionInputs.promptNum, questionInputs.startUnit, questionInputs.targetUnit)}
                     />
 
                     {JSON.stringify(correctAnswer)}
