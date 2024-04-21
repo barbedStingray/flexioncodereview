@@ -1,16 +1,11 @@
 import { useState } from 'react';
 import UnitConverter from './UnitConverter';
-import Navigate from './Components/Navigate';
 import './App.css';
 
 
 function App() {
 
   const [display, setDisplay] = useState(true);
-  const [titles, setTitles] = useState([
-    'Temperature',
-    'Volume',
-  ]);
 
 
   const temperatureLibrary = {
@@ -117,8 +112,6 @@ function App() {
     <div className="flexionCodeReview">
 
       <h1>Flexion Code Reiview</h1>
-
-      <Navigate titles={titles} setDisplay={setDisplay} />
 
       <div onClick={() => setDisplay(true)}><h3>Temperature</h3></div>
       <div onClick={() => setDisplay(false)}><h3>Volume</h3></div>

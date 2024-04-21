@@ -7,12 +7,14 @@ import SelectUnit from './Components/SelectUnit';
 const UnitConverter = ({ title, library }) => {
 
     const [correctAnswer, setCorrectAnswer] = useState('');
+    const [screenDisplay, setScreenDisplay] = useState('Correct');
     const [questionInputs, setQuestionInputs] = useState({
         promptNum: '',
         studentAnswer: '',
         startUnit: '',
         targetUnit: ''
     });
+    // console.log('SCREEN DISPLAY', screenDisplay);
 
 
     const unitConversions = library.conversions;
@@ -58,12 +60,14 @@ const UnitConverter = ({ title, library }) => {
         // console.log('e', e.target);
         // console.log('name', name);
         // console.log('value', value);
-        setQuestionInputs({ ...questionInputs, [name]: value })
+        setQuestionInputs({ ...questionInputs, [name]: value });
+        setScreenDisplay(''); // as inputs change, erase message
+
     }
 
-    function submitConversion(e, promptNum, studentAnswer, startUnit, targetUnit) {
+    function submitConversion(e, promptNum, startUnit, targetUnit) {
         e.preventDefault();
-        console.log('submitConversion', promptNum, studentAnswer, startUnit, targetUnit);
+        console.log('submitConversion', promptNum, startUnit, targetUnit);
 
         // ! allows the input box to be filled in with text
         const studentString = e.target.value;
@@ -76,49 +80,79 @@ const UnitConverter = ({ title, library }) => {
 
         if (promptNum.length === 0) {
             console.log('inputs are not full yet');
+            setScreenDisplay('initialNeeded');
             return
 
         } else if (firstInput === false || secondInput === false) {
             console.log('im sorry, check your inputs');
+            setScreenDisplay('invalid');
             return
 
         } else if (title === 'Temperature') {
             console.log('title is Temperature');
-
-            // testConvertTemperatures(promptNum, startUnit, targetUnit, unitConversions, setCorrectAnswer);
+            setScreenDisplay('');
             convertTemperatures();
-            return
 
         } else if (title === 'Volume') {
             console.log('title is Volume');
-
-            // testConvertVolumes(promptNum, startUnit, targetUnit, unitConversions, setCorrectAnswer);
+            setScreenDisplay('');
             convertVolumes();
-            return
 
         } else {
             console.log('something fishy is going on here...');
             return
         }
+
+        // validate correctness
+        if (studentString === correctAnswer) {
+            setScreenDisplay('correct');
+        } else {
+            setScreenDisplay('incorrect')
+        }
+
+    }
+
+    function generateScreenMessage() {
+        switch (screenDisplay) {
+            case ('initialNeeded'):
+                return <p>Please Enter a Value to Convert</p>
+            case ('invalid'):
+                return <p>Invalid Number, Check Your Values.</p>
+            case('correct'):
+                return <p>Correct!</p>
+            case('incorrect'):
+                return <p>Sorry, Incorrect</p>
+            case (''):
+                break;
+            default:
+                console.log('this is the default');
+        }
     }
 
     useEffect(() => {
         console.log(title);
-        if (title === 'Temperature') {
-            setQuestionInputs({
-                promptNum: '',
-                studentAnswer: '',
-                startUnit: 'Celsius',
-                targetUnit: 'Celsius'
-            });
-        } else if (title === 'Volume') {
-            setQuestionInputs({
-                promptNum: '',
-                studentAnswer: '',
-                startUnit: 'CubicFeet',
-                targetUnit: 'CubicFeet'
-            });
-        }
+        setScreenDisplay('');
+        setQuestionInputs({
+            promptNum: '',
+            studentAnswer: '',
+            startUnit: '',
+            targetUnit: ''
+        });
+        // if (title === 'Temperature') {
+        //     setQuestionInputs({
+        //         promptNum: '',
+        //         studentAnswer: '',
+        //         startUnit: 'Celsius',
+        //         targetUnit: 'Celsius'
+        //     });
+        // } else if (title === 'Volume') {
+        //     setQuestionInputs({
+        //         promptNum: '',
+        //         studentAnswer: '',
+        //         startUnit: 'CubicFeet',
+        //         targetUnit: 'CubicFeet'
+        //     });
+        // }
     }, [title]);
 
 
@@ -130,6 +164,7 @@ const UnitConverter = ({ title, library }) => {
             <h1>{title}</h1>
 
             {JSON.stringify(questionInputs)}
+            {generateScreenMessage()}
 
             <div>
                 <form>
@@ -141,12 +176,13 @@ const UnitConverter = ({ title, library }) => {
                     />
                     <SelectUnit
                         units={selectUnits}
-                        value={questionInputs.startValue}
+                        value={questionInputs.startUnit}
                         keyPair={'startUnit'}
                         setFunction={handleInputChanges}
                     />
                     <SelectUnit
                         units={selectUnits}
+                        value={questionInputs.targetUnit}
                         keyPair={'targetUnit'}
                         setFunction={handleInputChanges}
                     />
@@ -162,13 +198,6 @@ const UnitConverter = ({ title, library }) => {
                     {JSON.stringify(questionInputs.studentAnswer)}
 
                 </form>
-
-                {questionInputs.studentAnswer === correctAnswer ?
-                    (<div><p>Correct</p></div>)
-                    :
-                    (<div><p>NO</p></div>)
-                }
-
             </div>
         </div>
     )
