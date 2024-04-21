@@ -44,6 +44,12 @@ function App() {
         Kelvin: 'x * 5/9',
         Rankine: 'x'
       },
+    },
+    minimums: {
+      Fahrenheit: -459.67,
+      Celsius: -273.15,
+      Kelvin: 0,
+      Rankine: 0,
     }
   };
   const volumeLibrary = {
@@ -105,6 +111,14 @@ function App() {
         Liters: 0.0147868,
         Tablespoons: 1,
       },
+    },
+    minimums: {
+      CubicFeet: 0,
+      CubicInches: 0,
+      Cups: 0,
+      Gallons: 0,
+      Liters: 0,
+      Tablespoons: 0,
     }
   };
 
@@ -118,22 +132,22 @@ function App() {
               key={i}
               onClick={() => setDisplay(title)}
               className={title === display ? 'unitDiv highlight' : 'unitDiv'}> <h1>{title}</h1>
-          </div>
-        ))}
-      </div>
+            </div>
+          ))}
+        </div>
 
-      {display === "Temperature" ?
-        <UnitConverter
-          title={'Temperature'}
-          library={temperatureLibrary}
-        />
-        :
-        <UnitConverter
-          title={'Volume'}
-          library={volumeLibrary}
-        />
-      }
-    </div>
+        {display === "Temperature" ?
+          <UnitConverter
+            title={'Temperature'}
+            library={temperatureLibrary}
+          />
+          :
+          <UnitConverter
+            title={'Volume'}
+            library={volumeLibrary}
+          />
+        }
+      </div>
 
     </div >
   );

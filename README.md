@@ -10,3 +10,16 @@ The objective of this application is to assist teachers in grading their student
 
 
 
+## Testing
+- Validating Inputs
+
+# Converting Temperatures
+    - Minimums
+        - Fahrenheit: -459.67,
+        - Celsius: -273.15,
+        - Kelvin: 0,
+        - Rankine: 0,
+
+# Converting Volumes
+    - Minimum: 0
+ 

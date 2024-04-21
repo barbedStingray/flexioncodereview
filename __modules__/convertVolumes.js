@@ -2,7 +2,7 @@
 
 
 
-function calculateVolume(promptNum, startUnit, targetUnit) {
+function convertVolume(promptNum, startUnit, targetUnit) {
 
     const unitConversions = {
             CubicFeet: {
@@ -59,4 +59,4 @@ function calculateVolume(promptNum, startUnit, targetUnit) {
 }
 
 
-module.exports = calculateVolume
+module.exports = convertVolume

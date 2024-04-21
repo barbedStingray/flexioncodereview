@@ -1,6 +1,6 @@
 
 
-function calculateTemperature(promptNum, startUnit, targetUnit) {
+function convertTemperature(promptNum, startUnit, targetUnit) {
 
     const unitConversions = {
         Celsius: {
@@ -36,4 +36,4 @@ function calculateTemperature(promptNum, startUnit, targetUnit) {
 }
 
 
-module.exports = calculateTemperature
+module.exports = convertTemperature

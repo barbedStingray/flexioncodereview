@@ -16,35 +16,50 @@ const UnitConverter = ({ title, library }) => {
         startUnit: '',
         targetUnit: ''
     });
+    const {conversions, units, minimums} = library; // destructure library
 
-    const unitConversions = library.conversions;
     const selectUnits = library.units;
+
 
     function convertTemperatures() {
         const { promptNum, startUnit, targetUnit } = questionInputs;
         console.log('convertTemperatures', promptNum, startUnit, targetUnit);
         // get string equation
-        const stringEquation = unitConversions[`${startUnit}`][`${targetUnit}`];
+        const stringEquation = conversions[`${startUnit}`][`${targetUnit}`];
         console.log('stringEquation', stringEquation);
-
         // implement function() constructor
         const equationFunction = new Function('x', `return ${stringEquation}`);
-
         // run string function with Question value
         const correctTemp = equationFunction(Number(promptNum));
         console.log(correctTemp);
-
-        // return correctTemp;
-        setCorrectAnswer(correctTemp.toFixed(1));
+        return correctTemp;
     }
 
     function convertVolumes() {
         const { promptNum, startUnit, targetUnit } = questionInputs;
         console.log('convertVolume', promptNum, startUnit, targetUnit);
 
-        const correctVolume = Number(promptNum) * unitConversions[`${startUnit}`][`${targetUnit}`];
+        const correctVolume = Number(promptNum) * conversions[`${startUnit}`][`${targetUnit}`];
         console.log('correctVolume', correctVolume);
-        setCorrectAnswer(correctVolume.toFixed(1));
+        return correctVolume;
+    }
+
+    function validateUnitParameters(tempAnswer) {
+        console.log('validate volume parameters', tempAnswer);
+        const { targetUnit } = questionInputs;
+
+        const minParam = minimums[targetUnit];
+        console.log('minVolume', minParam);
+
+        if (tempAnswer < minParam) {
+            console.log('unit range DNE');
+            return true;
+        } else if (tempAnswer >= minParam) {
+            console.log('range is acceptable');
+            return false
+        } else {
+            console.log('volume parameter check weird');
+        }
     }
 
     function validateInputs(str) {
@@ -53,9 +68,6 @@ const UnitConverter = ({ title, library }) => {
 
     const handleInputChanges = (e) => {
         const { name, value } = e.target;
-        // console.log('e', e.target);
-        // console.log('name', name);
-        // console.log('value', value);
         setQuestionInputs({ ...questionInputs, [name]: value });
         setScreenDisplay(''); // as inputs change, erase message
         setCorrectAnswer(''); // as inputs change, correctAnswer will change
@@ -72,6 +84,12 @@ const UnitConverter = ({ title, library }) => {
         const firstInput = validateInputs(promptNum);
         const secondInput = validateInputs(studentString);
 
+        let correctResponse; 
+        let tempParams; // local scope, changing
+        let volumeParams; // local scope, changing
+
+
+
 
         if (promptNum.length < 1) {
             console.log('inputs are not full yet');
@@ -81,33 +99,50 @@ const UnitConverter = ({ title, library }) => {
         } else if (firstInput === false || secondInput === false) {
             console.log('im sorry, check your inputs');
             setScreenDisplay('invalid');
-            return
+            return;
 
         } else if (startUnit.length < 1 || targetUnit.length < 1) {
             console.log('please check your Units');
             setScreenDisplay('units');
-            return
+            return;
+
+
+
+
 
         } else if (title === 'Temperature') {
             console.log('title is Temperature');
-            // setScreenDisplay('');
-            convertTemperatures();
+            correctResponse = convertTemperatures();
+            tempParams = validateUnitParameters(correctResponse);
 
         } else if (title === 'Volume') {
             console.log('title is Volume');
-            // setScreenDisplay('');
-            convertVolumes();
+            correctResponse = convertVolumes();
+            volumeParams = validateUnitParameters(correctResponse);
 
         } else {
             console.log('something fishy is going on here...');
             return
         }
 
-        // validate correctness
-        if (studentString === correctAnswer) {
-            setScreenDisplay('correct');
+
+
+
+        // limit parameters and set variables
+        if (tempParams === true) {
+            console.log('temp below absolute 0');
+            setScreenDisplay('belowZero');
+            return;
+
+        } else if (volumeParams === true) {
+            console.log('volume is negative');
+            setScreenDisplay('negativeVolume');
+            return;
+
         } else {
-            setScreenDisplay('incorrect')
+            console.log('all parameters met');
+            setCorrectAnswer(correctResponse.toFixed(1));
+            setScreenDisplay(studentString === correctAnswer ? 'correct' : 'incorrect');
         }
     }
 
@@ -123,8 +158,10 @@ const UnitConverter = ({ title, library }) => {
                 return <div className='message correct'><p>Correct!</p></div>
             case ('incorrect'):
                 return <div className='message incorrect'><p>Sorry, Incorrect</p></div>
-            // case (''):
-            //     break;
+            case ('belowZero'):
+                return <div className='message parameters'><p>Below Absolute Zero</p></div>
+            case ('negativeVolume'):
+                return <div className='message parameters'><p>Negative Volume</p></div>
             default:
                 console.log('this is the default');
         }
@@ -145,9 +182,7 @@ const UnitConverter = ({ title, library }) => {
     return (
 
         <div className='unitConverter'>
-            {/* <h1>{title}</h1> */}
 
-            {/* {JSON.stringify(questionInputs)} */}
             <form className='conversionForm'>
                 <div className='inputField'>
                     <ValueInput
@@ -165,9 +200,9 @@ const UnitConverter = ({ title, library }) => {
                         setFunction={handleInputChanges}
                     />
                 </div>
-                <div className='inputField arrows'>
+                {/* <div className='inputField arrows'>
                     <HiMiniArrowsUpDown />
-                </div>
+                </div> */}
                 <div className='inputField'>
                     <SelectUnit
                         units={selectUnits}
