@@ -4,18 +4,19 @@
   box-sizing: border-box;
 }
 
-@font-face {
-  font-family: school;
-  src: url('./Fonts/penmanshipLedger.ttf');
-}
-
 :root {
   /* border: 2px solid yellow; */
   background-image: url('./Images/books.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-
+  --warning-yellow: #ffd700;
+  --background-yellow: #ffd90030;
+  --correct-green: #00af00;
+  --background-green: #00af0030;
+  --incorrect-red: #ff0000;
+  --background-red: #ff000030;
+  --background-input: #00000044;
 }
 
 .flexionCodeReview {
@@ -55,9 +56,8 @@
   cursor: pointer;
 }
 .highlight {
-  border: 1px solid black;
-  border-radius: 5px;
-  box-shadow: 0 0 5px black;
+  color: #91e0ff;
+  text-decoration: underline;
 }
 
 .unitConverter {
@@ -96,7 +96,7 @@
   text-align: center;
   border-radius: 10px;
   border: none;
-  background-color: #00000044;
+  background-color: var(--background-input);
   color: white;
 }
 .arrows {
@@ -113,7 +113,7 @@
 
 .textField {
   width: 45%;
-  box-shadow: 0 0 5px #00000099 inset;
+  box-shadow: 0 0 5px black inset;
   font-size: 3.25vh;
 }
 
@@ -137,14 +137,14 @@
   color: white;
 }
 .warning {
-  border: 3px solid #ffd700;
-  background-color: #ffd90030;
+  border: 3px solid var(--warning-yellow);
+  background-color: var(--background-yellow);
 }
 .correct {
-  border: 3px solid #00af00;
-  background-color: #00af0030;
+  border: 3px solid var(--correct-green);
+  background-color: var(--background-green);
 }
 .incorrect {
-  border: 3px solid red;
-  background-color: #ff000030;
+  border: 3px solid var(--incorrect-red);
+  background-color: var(--background-red);
 }

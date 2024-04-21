@@ -154,7 +154,7 @@ const UnitConverter = ({ title, library }) => {
                         setFunction={handleInputChanges}
                         keyPair={'promptNum'}
                         value={questionInputs.promptNum}
-                        placeholder={'Initial Value'}
+                        placeholder={'Value'}
                     />
                 </div>
                 <div className='inputField'>
