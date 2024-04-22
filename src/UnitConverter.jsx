@@ -6,8 +6,9 @@ import { PiArrowsDownUpBold } from "react-icons/pi";
 
 
 
-const UnitConverter = ({ title, library }) => {
+const UnitConverter = ({ library }) => {
 
+    const { title, conversions, units, minimums } = library;
     const [screenDisplay, setScreenDisplay] = useState(''); // user feedback
     const [correctAnswer, setCorrectAnswer] = useState('');
     const [questionInputs, setQuestionInputs] = useState({
@@ -16,7 +17,6 @@ const UnitConverter = ({ title, library }) => {
         startUnit: '',
         targetUnit: ''
     });
-    const { conversions, units, minimums } = library;
 
 
     // master function
@@ -43,15 +43,19 @@ const UnitConverter = ({ title, library }) => {
             console.log('unit parameters valid')
         }
 
-        console.log('validations, parameters, and filters applied');
+        console.log('displaying to dom');
         setCorrectAnswer(correctResponse.toFixed(1));
+
+        // ? may need to change these to numbers for accuracy in scientific notation
         setScreenDisplay(studentString === correctAnswer ? 'correct' : 'incorrect');
     }
 
     // modular functions
     function validateUnitsAndInputs(promptNum, studentString, startUnit, targetUnit) {
-        const firstInput = !isNaN(Number(promptNum));
-        const secondInput = !isNaN(Number(studentString));
+        // const firstInput = !isNaN(Number(promptNum));
+        // const secondInput = !isNaN(Number(studentString));
+        const firstInput = !isNaN((promptNum));
+        const secondInput = !isNaN((studentString));
 
         if (promptNum.length < 1) {
             console.log('inputs are not full yet');

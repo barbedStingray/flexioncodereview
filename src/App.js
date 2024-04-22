@@ -64,8 +64,8 @@ function App() {
     ],
     conversions: {
       CubicFeet: {
-        CubicFeet: 1,
-        CubicInches: 1728,
+        CubicFeet: 1.0,
+        CubicInches: 1728.0,
         Cups: 117.987,
         Gallons: 7.48052,
         Liters: 28.3168,
@@ -73,7 +73,7 @@ function App() {
       },
       CubicInches: {
         CubicFeet: 0.000578704,
-        CubicInches: 1,
+        CubicInches: 1.0,
         Cups: 0.0682794,
         Gallons: 0.004329,
         Liters: 0.0163871,
@@ -82,25 +82,25 @@ function App() {
       Cups: {
         CubicFeet: 0.00847552,
         CubicInches: 14.6457,
-        Cups: 1,
+        Cups: 1.0,
         Gallons: 0.0634013,
         Liters: 0.24,
         Tablespoons: 16.2307
       },
       Gallons: {
         CubicFeet: 0.133681,
-        CubicInches: 231,
+        CubicInches: 231.0,
         Cups: 15.7725,
-        Gallons: 1,
+        Gallons: 1.0,
         Liters: 3.78541,
-        Tablespoons: 256
+        Tablespoons: 256.0
       },
       Liters: {
         CubicFeet: 0.0353147,
         CubicInches: 61.0237,
         Cups: 4.16667,
         Gallons: 0.264172,
-        Liters: 1,
+        Liters: 1.0,
         Tablespoons: 67.628
       },
       Tablespoons: {
@@ -109,7 +109,7 @@ function App() {
         Cups: 0.0616115,
         Gallons: 0.00390625,
         Liters: 0.0147868,
-        Tablespoons: 1,
+        Tablespoons: 1.0,
       },
     },
     minimums: {
@@ -121,29 +121,32 @@ function App() {
       Tablespoons: 0,
     }
   };
+  // distance
+  // weight
 
   return (
     <div className="flexionCodeReview">
 
       <div className='conversionSpace'>
+
         <div className='unitTabs'>
           {titles.map((title, i) => (
             <div
               key={i}
               onClick={() => setDisplay(title)}
-              className={title === display ? 'unitDiv highlight' : 'unitDiv'}> <h1>{title}</h1>
+              className={title === display ? 'unitDiv highlight' : 'unitDiv'}
+            >
+              <h1>{title}</h1>
             </div>
           ))}
         </div>
 
         {display === "Temperature" ?
           <UnitConverter
-            title={'Temperature'}
             library={temperatureLibrary}
           />
           :
           <UnitConverter
-            title={'Volume'}
             library={volumeLibrary}
           />
         }

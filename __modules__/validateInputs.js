@@ -1,6 +1,6 @@
 
 
 function validateInputs(str) {
-    return !isNaN(Number(str));
+    return !isNaN((str));
 }
 module.exports = validateInputs;

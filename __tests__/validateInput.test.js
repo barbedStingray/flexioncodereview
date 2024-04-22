@@ -1,63 +1,48 @@
 
 const validateInput = require('../__modules__/validateInputs');
 
+
+test('Check to see if "null, undefined or a boolean" is a number', () => {
+    expect(validateInput('null')).toBe(false);
+    expect(validateInput('undefined')).toBe(false);
+    expect(validateInput('true')).toBe(false);
+});
+// object
+test('Check to see if { number: 76 } is a number', () => {
+    expect(validateInput({ number: 76 })).toBe(false);
+});
+// string value
+test('Check to see if a string and floating point string is a number', () => {
+    expect(validateInput('76')).toBe(true);    
+    expect(validateInput('7.76')).toBe(true);
+});
+
+// scientific notation 
+test('Check to see if "3.14e4" is a number', () => {
+    expect(validateInput('3.76e4')).toBe(true);
+    expect(validateInput('3.76e-4')).toBe(true);
+    expect(validateInput(3.76e-4)).toBe(true);
+    expect(validateInput('3.76e+4')).toBe(true);
+});
+
+// Symbols
 const falseSymbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'];
 const trueSymbols = ['+', '-'];
 
-// null
-test('Check to see if "null" is a number', () => {
-    expect(validateInput('null')).toBe(false);
-});
-// undefined
-test('Check to see if "undefined" is a number', () => {
-    expect(validateInput('undefined')).toBe(false);
-});
-// non-string
-test('Check to see if non-string 34 is a number', () => {
-    expect(validateInput(34)).toBe(true);
-});
-// string value
-test('Check to see if "76" is a number', () => {
-    expect(validateInput('76')).toBe(true);
-});
-// floating point string value
-test('Check to see if "7.76" is a number', () => {
-    expect(validateInput('7.76')).toBe(true);
-});
-// floating point number value
-test('Check to see if 7.76 is a number', () => {
-    expect(validateInput(7.76)).toBe(true);
-});
-// boolean
-test('Check to see if "true" is a number', () => {
-    expect(validateInput('true')).toBe(false);
-});
-
-
-
-// scientific notation and bigInts
-test('Check to see if "3.14e4" is a number', () => {
-    expect(validateInput('3.14e4')).toBe(true);
-});
-test('Check to see if "3.76e-4" is a number', () => {
-    expect(validateInput('3.76e-4')).toBe(true);
-});
-
-
-
 // symbols - FALSE
-for (let i = 0; i < falseSymbols.length; i++) {
-    console.log('THIS IS I', `${falseSymbols[i]}76`);
-    test('Check to see if a symbol combination with 76 is a number', () => {
+test('Check to see if a symbol combination with 76 is a number', () => {
+    for (let i = 0; i < falseSymbols.length; i++) {
         expect(validateInput(`${falseSymbols[i]}76`)).toBe(false);
-    });
-}
+        expect(validateInput(`7${falseSymbols[i]}6`)).toBe(false);
+        expect(validateInput(`76${falseSymbols[i]}`)).toBe(false);
+    }
+});
 // symbols - TRUE
-for (let i = 0; i < trueSymbols.length; i++) {
-    console.log('THIS IS I', `${trueSymbols[i]}76`);
-    test('Check to see if a symbol combination with 76 is a number', () => {
+test('Check to see if a symbol combination with 76 is a number', () => {
+    for (let i = 0; i < trueSymbols.length; i++) {
         expect(validateInput(`${trueSymbols[i]}76`)).toBe(true);
-    });
-}
+    }
+});
+
 
 
