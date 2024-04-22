@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ValueInput from './Components/ValueInput';
 import SelectUnit from './Components/SelectUnit';
-import { HiMiniArrowsUpDown } from "react-icons/hi2";
+import { PiArrowsDownUpBold } from "react-icons/pi";
 
 
 
@@ -16,133 +16,116 @@ const UnitConverter = ({ title, library }) => {
         startUnit: '',
         targetUnit: ''
     });
-    const {conversions, units, minimums} = library; // destructure library
-
-    const selectUnits = library.units;
+    const { conversions, units, minimums } = library;
 
 
-    function convertTemperatures() {
-        const { promptNum, startUnit, targetUnit } = questionInputs;
-        console.log('convertTemperatures', promptNum, startUnit, targetUnit);
-        // get string equation
-        const stringEquation = conversions[`${startUnit}`][`${targetUnit}`];
-        console.log('stringEquation', stringEquation);
-        // implement function() constructor
-        const equationFunction = new Function('x', `return ${stringEquation}`);
-        // run string function with Question value
-        const correctTemp = equationFunction(Number(promptNum));
-        console.log(correctTemp);
-        return correctTemp;
-    }
-
-    function convertVolumes() {
-        const { promptNum, startUnit, targetUnit } = questionInputs;
-        console.log('convertVolume', promptNum, startUnit, targetUnit);
-
-        const correctVolume = Number(promptNum) * conversions[`${startUnit}`][`${targetUnit}`];
-        console.log('correctVolume', correctVolume);
-        return correctVolume;
-    }
-
-    function validateUnitParameters(tempAnswer) {
-        console.log('validate volume parameters', tempAnswer);
-        const { targetUnit } = questionInputs;
-
-        const minParam = minimums[targetUnit];
-        console.log('minVolume', minParam);
-
-        if (tempAnswer < minParam) {
-            console.log('unit range DNE');
-            return true;
-        } else if (tempAnswer >= minParam) {
-            console.log('range is acceptable');
-            return false
-        } else {
-            console.log('volume parameter check weird');
-        }
-    }
-
-    function validateInputs(str) {
-        return !isNaN(Number(str));
-    }
-
-    const handleInputChanges = (e) => {
-        const { name, value } = e.target;
-        setQuestionInputs({ ...questionInputs, [name]: value });
-        setScreenDisplay(''); // as inputs change, erase message
-        setCorrectAnswer(''); // as inputs change, correctAnswer will change
-    }
-
+    // master function
     function submitConversion(e, promptNum, startUnit, targetUnit) {
         e.preventDefault();
 
-        // ! allows the input box to be filled in with text
+        // assigns value to questionInputs.studentAnswer
         const studentString = e.target.value;
         setQuestionInputs({ ...questionInputs, ['studentAnswer']: studentString });
 
-        // if either return false, function will cease
-        const firstInput = validateInputs(promptNum);
-        const secondInput = validateInputs(studentString);
 
-        let correctResponse; 
-        let tempParams; // local scope, changing
-        let volumeParams; // local scope, changing
+        if (validateUnitsAndInputs(promptNum, studentString, startUnit, targetUnit)) {
+            return console.log('Invalid unit or Input');
+        } else {
+            console.log('units and inputs valid')
+        }
 
+        const correctResponse = processCorrectResponse(title);
+        console.log('correctResponse', correctResponse);
 
+        if (filterUnitParameters(correctResponse, title)) {
+            return console.log('Invalid unit parameters');
+        } else {
+            console.log('unit parameters valid')
+        }
 
+        console.log('validations, parameters, and filters applied');
+        setCorrectAnswer(correctResponse.toFixed(1));
+        setScreenDisplay(studentString === correctAnswer ? 'correct' : 'incorrect');
+    }
+
+    // modular functions
+    function validateUnitsAndInputs(promptNum, studentString, startUnit, targetUnit) {
+        const firstInput = !isNaN(Number(promptNum));
+        const secondInput = !isNaN(Number(studentString));
 
         if (promptNum.length < 1) {
             console.log('inputs are not full yet');
             setScreenDisplay('initialNeeded');
-            return
+            return true;
 
         } else if (firstInput === false || secondInput === false) {
             console.log('im sorry, check your inputs');
             setScreenDisplay('invalid');
-            return;
+            return true;
 
         } else if (startUnit.length < 1 || targetUnit.length < 1) {
             console.log('please check your Units');
             setScreenDisplay('units');
-            return;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    function processCorrectResponse(title) {
+        console.log('processing correct response', title);
+        let correctResponse;
 
-
-
-
-        } else if (title === 'Temperature') {
+        if (title === 'Temperature') {
             console.log('title is Temperature');
             correctResponse = convertTemperatures();
-            tempParams = validateUnitParameters(correctResponse);
 
         } else if (title === 'Volume') {
             console.log('title is Volume');
             correctResponse = convertVolumes();
-            volumeParams = validateUnitParameters(correctResponse);
 
         } else {
-            console.log('something fishy is going on here...');
+            console.log('title not found');
             return
         }
+        return correctResponse;
+    }
 
+    function filterUnitParameters(correctResponse, title) {
+        console.log('filtering Unit parameters', title);
 
+        let unitParams = validateUnitParameters(correctResponse);
 
-
-        // limit parameters and set variables
-        if (tempParams === true) {
-            console.log('temp below absolute 0');
+        if (title === 'Temperature' && unitParams === false) {
+            console.log('below absolute zero');
             setScreenDisplay('belowZero');
-            return;
+            return true;
 
-        } else if (volumeParams === true) {
-            console.log('volume is negative');
+        } else if (title === 'Volume' && unitParams === false) {
+            console.log('negative volume');
             setScreenDisplay('negativeVolume');
-            return;
+            return true
 
         } else {
-            console.log('all parameters met');
-            setCorrectAnswer(correctResponse.toFixed(1));
-            setScreenDisplay(studentString === correctAnswer ? 'correct' : 'incorrect');
+            return false;
+        }
+    }
+
+    function validateUnitParameters(correctResponse) {
+        console.log('validate volume parameters', correctResponse);
+        const { targetUnit } = questionInputs;
+
+        const minParam = minimums[targetUnit];
+        console.log('minParam', minParam);
+
+        if (correctResponse < minParam) {
+            console.log('unit range DNE');
+            return false;
+        } else if (correctResponse >= minParam) {
+            console.log('range is acceptable');
+            return true;
+        } else {
+            console.log('volume parameter check unknown');
         }
     }
 
@@ -163,9 +146,35 @@ const UnitConverter = ({ title, library }) => {
             case ('negativeVolume'):
                 return <div className='message parameters'><p>Negative Volume</p></div>
             default:
-                console.log('this is the default');
+                // console.log('this is the default');
+                <div></div>
         }
     }
+
+    function handleInputChanges(e) {
+        const { name, value } = e.target;
+        setQuestionInputs({ ...questionInputs, [name]: value });
+        setScreenDisplay(''); // as inputs change, erase message
+        setCorrectAnswer(''); // as inputs change, correctAnswer will change
+    }
+    
+    // unit conversion functions
+    function convertTemperatures() {
+        console.log('converting temperatures');
+        const { promptNum, startUnit, targetUnit } = questionInputs;
+        const stringEquation = conversions[`${startUnit}`][`${targetUnit}`]; // get string equation
+        const equationFunction = new Function('x', `return ${stringEquation}`); // function constructor
+        const correctTemp = equationFunction(Number(promptNum)); // run function
+        return correctTemp;
+    }
+
+    function convertVolumes() {
+        console.log('converting volume');
+        const { promptNum, startUnit, targetUnit } = questionInputs;
+        const correctVolume = Number(promptNum) * conversions[`${startUnit}`][`${targetUnit}`];
+        return correctVolume;
+    }
+
 
     useEffect(() => {
         setScreenDisplay('');
@@ -180,7 +189,6 @@ const UnitConverter = ({ title, library }) => {
 
 
     return (
-
         <div className='unitConverter'>
 
             <form className='conversionForm'>
@@ -194,18 +202,18 @@ const UnitConverter = ({ title, library }) => {
                 </div>
                 <div className='inputField'>
                     <SelectUnit
-                        units={selectUnits}
+                        units={units}
                         value={questionInputs.startUnit}
                         keyPair={'startUnit'}
                         setFunction={handleInputChanges}
                     />
                 </div>
-                {/* <div className='inputField arrows'>
-                    <HiMiniArrowsUpDown />
-                </div> */}
+                <div className='inputField arrows'>
+                    <PiArrowsDownUpBold />
+                </div>
                 <div className='inputField'>
                     <SelectUnit
-                        units={selectUnits}
+                        units={units}
                         value={questionInputs.targetUnit}
                         keyPair={'targetUnit'}
                         setFunction={handleInputChanges}
