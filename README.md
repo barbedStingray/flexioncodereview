@@ -6,12 +6,18 @@ Hello! This is my submission for the Flexion Code Challenge in April of 2024.
 The objective of this application is to assist teachers in grading their students unit conversion worksheets. They are to provide ..............
 
 
+## Deployment
+The app is currently deployed through Vercel. 
+You can access it [here](https://flexioncodereview.vercel.app).
+
+## Running the App
+The app 
 
 
 ## Development Tasks
     1. 
-    2. Generator Function
-    3. Integrated Testing in my Deployments
+    2. Generator Function - Security Concerns
+    3. Integrate Testing in Deployments
     4.
     5.
 

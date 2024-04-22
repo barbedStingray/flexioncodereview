@@ -1,24 +1,18 @@
 
 const validateInput = require('../__modules__/validateInputs');
 
+// inputs are submitted as strings within UnitConverter.jsx
 
-test('Check to see if "null, undefined or a boolean" is a number', () => {
+test('Check to see if "null, undefined a boolean", or an object is a number', () => {
     expect(validateInput('null')).toBe(false);
     expect(validateInput('undefined')).toBe(false);
     expect(validateInput('true')).toBe(false);
-});
-// object
-test('Check to see if { number: 76 } is a number', () => {
     expect(validateInput({ number: 76 })).toBe(false);
 });
-// string value
-test('Check to see if a string and floating point string is a number', () => {
-    expect(validateInput('76')).toBe(true);    
-    expect(validateInput('7.76')).toBe(true);
-});
 
-// scientific notation 
-test('Check to see if "3.14e4" is a number', () => {
+test('Check strings,floating pionts and exponentials for numbers', () => {
+    expect(validateInput('76')).toBe(true);
+    expect(validateInput('7.76')).toBe(true);
     expect(validateInput('3.76e4')).toBe(true);
     expect(validateInput('3.76e-4')).toBe(true);
     expect(validateInput(3.76e-4)).toBe(true);
@@ -28,7 +22,6 @@ test('Check to see if "3.14e4" is a number', () => {
 // Symbols
 const falseSymbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'];
 const trueSymbols = ['+', '-'];
-
 // symbols - FALSE
 test('Check to see if a symbol combination with 76 is a number', () => {
     for (let i = 0; i < falseSymbols.length; i++) {

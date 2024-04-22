@@ -121,9 +121,7 @@ function App() {
       Tablespoons: 0,
     }
   };
-  // distance
-  // weight
-
+  
   return (
     <div className="flexionCodeReview">
 

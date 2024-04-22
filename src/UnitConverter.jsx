@@ -5,7 +5,6 @@ import { PiArrowsDownUpBold } from "react-icons/pi";
 
 
 
-
 const UnitConverter = ({ library }) => {
 
     const { title, conversions, units, minimums } = library;
@@ -23,7 +22,7 @@ const UnitConverter = ({ library }) => {
     function submitConversion(e, promptNum, startUnit, targetUnit) {
         e.preventDefault();
 
-        // assigns value to questionInputs.studentAnswer
+        // handle the input change
         const studentString = e.target.value;
         setQuestionInputs({ ...questionInputs, ['studentAnswer']: studentString });
 
@@ -34,19 +33,20 @@ const UnitConverter = ({ library }) => {
             console.log('units and inputs valid')
         }
 
-        const correctResponse = processCorrectResponse(title);
+        let correctResponse = processCorrectResponse(title);
         console.log('correctResponse', correctResponse);
 
         if (filterUnitParameters(correctResponse, title)) {
             return console.log('Invalid unit parameters');
         } else {
-            console.log('unit parameters valid')
+            console.log('unit parameters valid');
         }
 
-        console.log('displaying to dom');
-        setCorrectAnswer(correctResponse.toFixed(1));
+        correctResponse = adjustSizeandRoundNumber(correctResponse);
+        console.log('correctResponse', correctResponse);
 
-        // ? may need to change these to numbers for accuracy in scientific notation
+        console.log('displaying to dom');
+        setCorrectAnswer(correctResponse);
         setScreenDisplay(studentString === correctAnswer ? 'correct' : 'incorrect');
     }
 
@@ -133,12 +133,29 @@ const UnitConverter = ({ library }) => {
         }
     }
 
+    function adjustSizeandRoundNumber(correctResponse) {
+        let numberAdjust;
+
+        if (correctResponse <= 0.05) {
+            numberAdjust = correctResponse.toExponential(1);
+            return numberAdjust;
+
+        } else if (correctResponse > 9999) {
+            numberAdjust = correctResponse.toExponential(1);
+            return numberAdjust;
+
+        } else {
+            numberAdjust = correctResponse.toFixed(1);
+            return numberAdjust;
+        }
+    }
+
     function generateScreenMessage() {
         switch (screenDisplay) {
             case ('initialNeeded'):
                 return <div className='message warning'><p>Enter a Value to Convert</p></div>
             case ('invalid'):
-                return <div className='message warning'><p>Invalid, Check Your Values</p></div>
+                return <div className='message warning'><p>Invalid Value or Incorrect</p></div>
             case ('units'):
                 return <div className='message warning'><p>Invalid, Check Your Units</p></div>
             case ('correct'):
