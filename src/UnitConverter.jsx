@@ -27,80 +27,73 @@ const UnitConverter = ({ library }) => {
         setQuestionInputs({ ...questionInputs, ['studentAnswer']: studentString });
 
 
-        if (validateUnitsAndInputs(promptNum, studentString, startUnit, targetUnit)) {
+        if (!inputsAreValid(promptNum, studentString, startUnit, targetUnit)) {
             // console.log('Invalid unit or Input');
             return;
-        } else {
-            // console.log('units and inputs valid')
         }
 
         let correctResponse = processCorrectResponse(title);
 
-        const unitParams = identifyUnitParameters(correctResponse);
+        // determines if it below unit parameters / below is false
+        const validatedUnit = validateUnitParameter(correctResponse);
 
-        if (filterUnitParameters(unitParams, title)) {
-            // console.log('Invalid unit parameters');
+        if (!validatedUnit) {
+            displayUnitParameter(title);
             return;
-        } else {
-            // console.log('unit parameters valid');
         }
 
-        correctResponse = adjustCorrectResponseLength(correctResponse, title);
-        console.log(correctResponse);
+        const adjustedCorrectResponse = adjustCorrectResponseLength(correctResponse, title);
 
-        setCorrectAnswer(correctResponse);
+        setCorrectAnswer(adjustedCorrectResponse);
 
-        if (differentiateBetweenScientificNumber(correctResponse)) {
-            return setScreenDisplay(studentString === correctResponse ? 'correct' : 'incorrect');
+        if (separateStringAndNumber(adjustedCorrectResponse)) {
+            return setScreenDisplay(studentString === correctAnswer ? 'correct' : 'incorrect');
         } else {
-            return setScreenDisplay(Number(studentString) === Number(correctResponse) ? 'correct' : 'incorrect');
+            return setScreenDisplay(Number(studentString) === Number(correctAnswer) ? 'correct' : 'incorrect');
         }
     }
 
     // modular functions
-    function validateUnitsAndInputs(promptNum, studentString, startUnit, targetUnit) {
-        const firstInput = !isNaN((promptNum));
-        const secondInput = !isNaN((studentString));
+    function inputsAreValid(promptNum, studentString, startUnit, targetUnit) {
+        const firstInput = !isNaN(promptNum);
+        const secondInput = !isNaN(studentString);
 
         if (promptNum.length < 1) {
             // console.log('inputs are not full yet');
             setScreenDisplay('initialNeeded');
-            return true;
+            return false;
 
         } else if (firstInput === false || secondInput === false) {
             // console.log('im sorry, check your inputs');
             setScreenDisplay('invalid');
-            return true;
+            return false;
 
         } else if (startUnit.length < 1 || targetUnit.length < 1) {
             // console.log('please check your Units');
             setScreenDisplay('units');
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 
     function processCorrectResponse(title) {
         // console.log('processing correct response', title);
-        let correctResponse;
 
         if (title === 'Temperature') {
             // console.log('title is Temperature');
-            correctResponse = convertTemperatures();
+            return convertTemperatures();
 
         } else if (title === 'Volume') {
             // console.log('title is Volume');
-            correctResponse = convertVolumes();
-
-        } else {
-            // console.log('title not found');
-            return
+            return convertVolumes();
         }
-        return correctResponse;
+        // add more units here
+        // if invalid title, return an error
+        // return needs to be a number
     }
 
-    function identifyUnitParameters(correctResponse) {
+    function validateUnitParameter(correctResponse) {
         // console.log('validate volume parameters', correctResponse);
         const { targetUnit } = questionInputs;
 
@@ -110,31 +103,24 @@ const UnitConverter = ({ library }) => {
         if (correctResponse < minParam) {
             // console.log('unit range DNE');
             return false;
-        } else if (correctResponse >= minParam) {
+        } else {
             // console.log('range is acceptable');
             return true;
-        } else {
-            // console.log('volume parameter check unknown');
-            return
         }
     }
 
-    function filterUnitParameters(unitParams, title) {
+    function displayUnitParameter(title) {
         // console.log('filtering Unit parameters', title);
 
-        if (title === 'Temperature' && unitParams === false) {
+        if (title === 'Temperature') {
             // console.log('below absolute zero');
             setScreenDisplay('belowZero');
-            return true;
-
-        } else if (title === 'Volume' && unitParams === false) {
-            // console.log('negative volume');
-            setScreenDisplay('negativeVolume');
-            return true
 
         } else {
-            return false;
+            // console.log('negative volume');
+            setScreenDisplay('negativeVolume');
         }
+        // add more units here
     }
 
     function adjustCorrectResponseLength(correctResponse, title) {
@@ -154,16 +140,12 @@ const UnitConverter = ({ library }) => {
         }
     }
 
-    function differentiateBetweenScientificNumber(correctResponse) {
-        // console.log('validate student answer', correctResponse);
-        // console.log(correctResponse.indexOf('e'));
-        // check for scientific notation
-        if (correctResponse.indexOf('e') >= 0) {
-            // console.log('scientific');
-            return true;
-        } else if (correctResponse.indexOf('e') === -1) {
-            // console.log('not scientific');
+    function separateStringAndNumber(adjustedCorrectResponse) {
+        console.log('validate student answer', adjustedCorrectResponse);
+        if (adjustedCorrectResponse.indexOf('e') === -1) {
             return false;
+        } else  {
+            return true;
         }
     }
 
