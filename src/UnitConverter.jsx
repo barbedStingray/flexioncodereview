@@ -28,13 +28,11 @@ const UnitConverter = ({ library }) => {
 
 
         if (!inputsAreValid(promptNum, studentString, startUnit, targetUnit)) {
-            // console.log('Invalid unit or Input');
             return;
         }
 
         let correctResponse = processCorrectResponse(title);
 
-        // determines if it below unit parameters / below is false
         const validatedUnit = validateUnitParameter(correctResponse);
 
         if (!validatedUnit) {
@@ -44,13 +42,8 @@ const UnitConverter = ({ library }) => {
 
         const adjustedCorrectResponse = adjustCorrectResponseLength(correctResponse);
         const studentNumber = adjustCorrectResponseLength(studentString);
-        // console.log('studentNumber', studentNumber);
-        // console.log('adjustedCorrectNumber', adjustedCorrectResponse);
 
         setCorrectAnswer(adjustedCorrectResponse);
-
-        // console.log('COMPARING UNTIS', Number(studentNumber), Number(adjustedCorrectResponse));
-
         return setScreenDisplay(Number(studentNumber) === Number(adjustedCorrectResponse) ? 'correct' : 'incorrect');
     }
 
@@ -60,17 +53,14 @@ const UnitConverter = ({ library }) => {
         const secondInput = !isNaN(studentString);
 
         if (promptNum.length < 1) {
-            // console.log('inputs are not full yet');
             setScreenDisplay('initialNeeded');
             return false;
 
         } else if (firstInput === false || secondInput === false) {
-            // console.log('im sorry, check your inputs');
             setScreenDisplay('invalid');
             return false;
 
         } else if (startUnit.length < 1 || targetUnit.length < 1) {
-            // console.log('please check your Units');
             setScreenDisplay('units');
             return false;
         } else {
@@ -79,14 +69,10 @@ const UnitConverter = ({ library }) => {
     }
 
     function processCorrectResponse(title) {
-        // console.log('processing correct response', title);
 
         if (title === 'Temperature') {
-            // console.log('title is Temperature');
             return convertTemperatures();
-
         } else if (title === 'Volume') {
-            // console.log('title is Volume');
             return convertVolumes();
         }
         // add more units here
@@ -95,30 +81,22 @@ const UnitConverter = ({ library }) => {
     }
 
     function validateUnitParameter(correctResponse) {
-        // console.log('validate volume parameters', correctResponse);
         const { targetUnit } = questionInputs;
-
         const minParam = minimums[targetUnit];
-        // console.log('minParam', minParam);
 
         if (correctResponse < minParam) {
-            // console.log('unit range DNE');
             return false;
         } else {
-            // console.log('range is acceptable');
             return true;
         }
     }
 
     function displayUnitParameter(title) {
-        // console.log('filtering Unit parameters', title);
 
         if (title === 'Temperature') {
-            // console.log('below absolute zero');
             setScreenDisplay('belowZero');
 
         } else {
-            // console.log('negative volume');
             setScreenDisplay('negativeVolume');
         }
         // add more units here
@@ -167,14 +145,12 @@ const UnitConverter = ({ library }) => {
             case ('negativeVolume'):
                 return <div className='message parameters'><p>Negative Volume</p></div>
             default:
-                // console.log('this is the default');
                 <div></div>
         }
     }
 
     // unit conversion functions
     function convertTemperatures() {
-        // console.log('converting temperatures');
         const { promptNum, startUnit, targetUnit } = questionInputs;
         const stringEquation = conversions[`${startUnit}`][`${targetUnit}`]; // get string equation
         const equationFunction = new Function('x', `return ${stringEquation}`); // function constructor
@@ -183,12 +159,10 @@ const UnitConverter = ({ library }) => {
     }
 
     function convertVolumes() {
-        // console.log('converting volume');
         const { promptNum, startUnit, targetUnit } = questionInputs;
         const correctVolume = Number(promptNum) * conversions[`${startUnit}`][`${targetUnit}`];
         return correctVolume;
     }
-
 
     useEffect(() => {
         setScreenDisplay('');
