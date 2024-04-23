@@ -155,7 +155,7 @@ const UnitConverter = ({ library }) => {
             case ('initialNeeded'):
                 return <div className='message warning'><p>Enter a Value to Convert</p></div>
             case ('invalid'):
-                return <div className='message warning'><p>Invalid Value or Incorrect</p></div>
+                return <div className='message warning'><p>Invalid Value</p></div>
             case ('units'):
                 return <div className='message warning'><p>Invalid, Check Your Units</p></div>
             case ('correct'):
