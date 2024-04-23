@@ -1,5 +1,5 @@
 # Flexion Code Challenge (unit-conversion)
-Hello! This is my submission for the Flexion Code Challenge in April of 2024. 
+Hello! This submission is from Ben Rehmann for the Flexion Code Challenge in April of 2024. 
 
 ## Project Description
 The objective of this application is to assist teachers in grading worksheets for a science unit. Currently, the worksheets focus on converting units of Temperature and Volume. With the application, teachers can input their questions, units of measurement, and student responses to validate answers.
@@ -18,6 +18,7 @@ If you would like to run the app locally, feel free to clone it down to your dev
     On the Command Line... 
         - npm install
         - npm start
+        - npm test / to run jest
 
 ## Development Tasks
     1. Ensure unit tests are integrated as part of the deployment pipeline

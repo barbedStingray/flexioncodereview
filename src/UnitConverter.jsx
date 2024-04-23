@@ -42,15 +42,16 @@ const UnitConverter = ({ library }) => {
             return;
         }
 
-        const adjustedCorrectResponse = adjustCorrectResponseLength(correctResponse, title);
+        const adjustedCorrectResponse = adjustCorrectResponseLength(correctResponse);
+        const studentNumber = adjustCorrectResponseLength(studentString);
+        // console.log('studentNumber', studentNumber);
+        // console.log('adjustedCorrectNumber', adjustedCorrectResponse);
 
         setCorrectAnswer(adjustedCorrectResponse);
 
-        if (separateStringAndNumber(adjustedCorrectResponse)) {
-            return setScreenDisplay(studentString === correctAnswer ? 'correct' : 'incorrect');
-        } else {
-            return setScreenDisplay(Number(studentString) === Number(correctAnswer) ? 'correct' : 'incorrect');
-        }
+        // console.log('COMPARING UNTIS', Number(studentNumber), Number(adjustedCorrectResponse));
+
+        return setScreenDisplay(Number(studentNumber) === Number(adjustedCorrectResponse) ? 'correct' : 'incorrect');
     }
 
     // modular functions
@@ -123,29 +124,21 @@ const UnitConverter = ({ library }) => {
         // add more units here
     }
 
-    function adjustCorrectResponseLength(correctResponse, title) {
+    function adjustCorrectResponseLength(correctResponse) {
+        let response = Number(correctResponse)
         let numberAdjust;
 
-        if (correctResponse < 0.05 && title === 'Volume') {
-            numberAdjust = correctResponse.toExponential(1);
+        if (response < 0.05) {
+            numberAdjust = response.toExponential(1);
             return numberAdjust;
 
-        } else if (correctResponse > 999999 && title === 'Volume') {
-            numberAdjust = correctResponse.toExponential(1);
+        } else if (response > 999999) {
+            numberAdjust = response.toExponential(1);
             return numberAdjust;
 
         } else {
-            numberAdjust = correctResponse.toFixed(1);
+            numberAdjust = response.toFixed(1);
             return numberAdjust;
-        }
-    }
-
-    function separateStringAndNumber(adjustedCorrectResponse) {
-        console.log('validate student answer', adjustedCorrectResponse);
-        if (adjustedCorrectResponse.indexOf('e') === -1) {
-            return false;
-        } else  {
-            return true;
         }
     }
 
