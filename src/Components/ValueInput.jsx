@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const ValueInput = ({ setFunction, keyPair, value, placeholder }) => {
 
     return (

@@ -36,13 +36,15 @@ const UnitConverter = ({ library }) => {
         let correctResponse = processCorrectResponse(title);
         console.log('correctResponse', correctResponse);
 
-        if (filterUnitParameters(correctResponse, title)) {
+        const unitParams = identifyUnitParameters(correctResponse);
+
+        if (filterUnitParameters(unitParams, title)) {
             return console.log('Invalid unit parameters');
         } else {
             console.log('unit parameters valid');
         }
 
-        correctResponse = adjustSizeandRoundNumber(correctResponse);
+        correctResponse = adjustCorrectResponseLength(correctResponse, title);
         console.log('correctResponse', correctResponse);
 
         console.log('displaying to dom');
@@ -52,8 +54,6 @@ const UnitConverter = ({ library }) => {
 
     // modular functions
     function validateUnitsAndInputs(promptNum, studentString, startUnit, targetUnit) {
-        // const firstInput = !isNaN(Number(promptNum));
-        // const secondInput = !isNaN(Number(studentString));
         const firstInput = !isNaN((promptNum));
         const secondInput = !isNaN((studentString));
 
@@ -95,10 +95,27 @@ const UnitConverter = ({ library }) => {
         return correctResponse;
     }
 
-    function filterUnitParameters(correctResponse, title) {
-        console.log('filtering Unit parameters', title);
+    function identifyUnitParameters(correctResponse) {
+        console.log('validate volume parameters', correctResponse);
+        const { targetUnit } = questionInputs;
 
-        let unitParams = validateUnitParameters(correctResponse);
+        const minParam = minimums[targetUnit];
+        console.log('minParam', minParam);
+
+        if (correctResponse < minParam) {
+            console.log('unit range DNE');
+            return false;
+        } else if (correctResponse >= minParam) {
+            console.log('range is acceptable');
+            return true;
+        } else {
+            console.log('volume parameter check unknown');
+            return
+        }
+    }
+
+    function filterUnitParameters(unitParams, title) {
+        console.log('filtering Unit parameters', title);
 
         if (title === 'Temperature' && unitParams === false) {
             console.log('below absolute zero');
@@ -115,32 +132,14 @@ const UnitConverter = ({ library }) => {
         }
     }
 
-    function validateUnitParameters(correctResponse) {
-        console.log('validate volume parameters', correctResponse);
-        const { targetUnit } = questionInputs;
-
-        const minParam = minimums[targetUnit];
-        console.log('minParam', minParam);
-
-        if (correctResponse < minParam) {
-            console.log('unit range DNE');
-            return false;
-        } else if (correctResponse >= minParam) {
-            console.log('range is acceptable');
-            return true;
-        } else {
-            console.log('volume parameter check unknown');
-        }
-    }
-
-    function adjustSizeandRoundNumber(correctResponse) {
+    function adjustCorrectResponseLength(correctResponse, title) {
         let numberAdjust;
 
-        if (correctResponse <= 0.05) {
+        if (correctResponse < 0.05 && title === 'Volume') {
             numberAdjust = correctResponse.toExponential(1);
             return numberAdjust;
 
-        } else if (correctResponse > 9999) {
+        } else if (correctResponse > 9999 && title === 'Volume') {
             numberAdjust = correctResponse.toExponential(1);
             return numberAdjust;
 
@@ -150,6 +149,14 @@ const UnitConverter = ({ library }) => {
         }
     }
 
+    function handleInputChanges(e) {
+        const { name, value } = e.target;
+        setQuestionInputs({ ...questionInputs, [name]: value });
+        setScreenDisplay(''); // as inputs change, erase message
+        setCorrectAnswer(''); // as inputs change, correctAnswer will change
+    }
+
+    // display function
     function generateScreenMessage() {
         switch (screenDisplay) {
             case ('initialNeeded'):
@@ -172,13 +179,6 @@ const UnitConverter = ({ library }) => {
         }
     }
 
-    function handleInputChanges(e) {
-        const { name, value } = e.target;
-        setQuestionInputs({ ...questionInputs, [name]: value });
-        setScreenDisplay(''); // as inputs change, erase message
-        setCorrectAnswer(''); // as inputs change, correctAnswer will change
-    }
-    
     // unit conversion functions
     function convertTemperatures() {
         console.log('converting temperatures');

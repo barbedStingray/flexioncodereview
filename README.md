@@ -2,9 +2,9 @@
 Hello! This is my submission for the Flexion Code Challenge in April of 2024. 
 
 ## Project Description
-The objective of this application is to assist teachers in grading worksheets for their science unit. Teachers can input their questions, unit parameters, and student responses to validate answers.
+The objective of this application is to assist teachers in grading worksheets for a science unit. Currently, the worksheets focus on converting units of Temperature and Volume. With the application, teachers can input their questions, units of measurement, and student responses to validate answers.
 
-    Current Unit Conversions
+    Available Unit Conversions
         - Temperatures: Kelvin, Celsius, Fahrenheit, and Rankine
         - Volumes: Liters, Tablespoons, Cubic-inches, Cups, Cubic-feet, and Gallons
 
@@ -14,7 +14,7 @@ The app is currently deployed through Vercel.
 
 ## Running the App
 If you would like to run the app locally, feel free to clone it down to your device. 
-    
+
     On the Command Line... 
         - npm install
         - npm start
@@ -29,7 +29,7 @@ If you would like to run the app locally, feel free to clone it down to your dev
         - Increase readability inside UnitConverter
         - Functions: screen message and conversions
     4. Turn the 'studentAnswer' input into a reusable component. 
-    5. Refine the UX/UI: Is a solution display helpful? Needed? Can the CSS be more modular? inline-css?
+    5. Refine the UX/UI: Is a solution display helpful? Can the CSS be more modular? Inline-css?
 
 ### Technologies Used
     - React
