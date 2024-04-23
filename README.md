@@ -25,11 +25,13 @@ If you would like to run the app locally, feel free to clone it down to your dev
         - Security Concerns
         - function location 
         - would require library additions
-    3. Identify functions that could be moved into their own files to increase reusability
+    3. Turn the 'studentAnswer' input into a reusable component. 
+        - Detatch it from the submit function
+        - Allow the for to submit upon a change in any of the four inputs
+    4. Identify functions that could be moved into their own files to increase reusability
         - Increase readability inside UnitConverter
         - Functions: screen message and conversions
-    4. Turn the 'studentAnswer' input into a reusable component. 
-    5. Refine the UX/UI: Is a solution display helpful? Can the CSS be more modular? Inline-css?
+    5. Refine the UX/UI: run submit on any change to the form? Can the CSS be more modular?
 
 ### Technologies Used
     - React

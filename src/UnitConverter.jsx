@@ -28,28 +28,33 @@ const UnitConverter = ({ library }) => {
 
 
         if (validateUnitsAndInputs(promptNum, studentString, startUnit, targetUnit)) {
-            return console.log('Invalid unit or Input');
+            // console.log('Invalid unit or Input');
+            return;
         } else {
-            console.log('units and inputs valid')
+            // console.log('units and inputs valid')
         }
 
         let correctResponse = processCorrectResponse(title);
-        console.log('correctResponse', correctResponse);
 
         const unitParams = identifyUnitParameters(correctResponse);
 
         if (filterUnitParameters(unitParams, title)) {
-            return console.log('Invalid unit parameters');
+            // console.log('Invalid unit parameters');
+            return;
         } else {
-            console.log('unit parameters valid');
+            // console.log('unit parameters valid');
         }
 
         correctResponse = adjustCorrectResponseLength(correctResponse, title);
-        console.log('correctResponse', correctResponse);
+        console.log(correctResponse);
 
-        console.log('displaying to dom');
         setCorrectAnswer(correctResponse);
-        setScreenDisplay(studentString === correctAnswer ? 'correct' : 'incorrect');
+
+        if (differentiateBetweenScientificNumber(correctResponse)) {
+            return setScreenDisplay(studentString === correctResponse ? 'correct' : 'incorrect');
+        } else {
+            return setScreenDisplay(Number(studentString) === Number(correctResponse) ? 'correct' : 'incorrect');
+        }
     }
 
     // modular functions
@@ -58,17 +63,17 @@ const UnitConverter = ({ library }) => {
         const secondInput = !isNaN((studentString));
 
         if (promptNum.length < 1) {
-            console.log('inputs are not full yet');
+            // console.log('inputs are not full yet');
             setScreenDisplay('initialNeeded');
             return true;
 
         } else if (firstInput === false || secondInput === false) {
-            console.log('im sorry, check your inputs');
+            // console.log('im sorry, check your inputs');
             setScreenDisplay('invalid');
             return true;
 
         } else if (startUnit.length < 1 || targetUnit.length < 1) {
-            console.log('please check your Units');
+            // console.log('please check your Units');
             setScreenDisplay('units');
             return true;
         } else {
@@ -77,53 +82,53 @@ const UnitConverter = ({ library }) => {
     }
 
     function processCorrectResponse(title) {
-        console.log('processing correct response', title);
+        // console.log('processing correct response', title);
         let correctResponse;
 
         if (title === 'Temperature') {
-            console.log('title is Temperature');
+            // console.log('title is Temperature');
             correctResponse = convertTemperatures();
 
         } else if (title === 'Volume') {
-            console.log('title is Volume');
+            // console.log('title is Volume');
             correctResponse = convertVolumes();
 
         } else {
-            console.log('title not found');
+            // console.log('title not found');
             return
         }
         return correctResponse;
     }
 
     function identifyUnitParameters(correctResponse) {
-        console.log('validate volume parameters', correctResponse);
+        // console.log('validate volume parameters', correctResponse);
         const { targetUnit } = questionInputs;
 
         const minParam = minimums[targetUnit];
-        console.log('minParam', minParam);
+        // console.log('minParam', minParam);
 
         if (correctResponse < minParam) {
-            console.log('unit range DNE');
+            // console.log('unit range DNE');
             return false;
         } else if (correctResponse >= minParam) {
-            console.log('range is acceptable');
+            // console.log('range is acceptable');
             return true;
         } else {
-            console.log('volume parameter check unknown');
+            // console.log('volume parameter check unknown');
             return
         }
     }
 
     function filterUnitParameters(unitParams, title) {
-        console.log('filtering Unit parameters', title);
+        // console.log('filtering Unit parameters', title);
 
         if (title === 'Temperature' && unitParams === false) {
-            console.log('below absolute zero');
+            // console.log('below absolute zero');
             setScreenDisplay('belowZero');
             return true;
 
         } else if (title === 'Volume' && unitParams === false) {
-            console.log('negative volume');
+            // console.log('negative volume');
             setScreenDisplay('negativeVolume');
             return true
 
@@ -139,13 +144,26 @@ const UnitConverter = ({ library }) => {
             numberAdjust = correctResponse.toExponential(1);
             return numberAdjust;
 
-        } else if (correctResponse > 9999 && title === 'Volume') {
+        } else if (correctResponse > 999999 && title === 'Volume') {
             numberAdjust = correctResponse.toExponential(1);
             return numberAdjust;
 
         } else {
             numberAdjust = correctResponse.toFixed(1);
             return numberAdjust;
+        }
+    }
+
+    function differentiateBetweenScientificNumber(correctResponse) {
+        // console.log('validate student answer', correctResponse);
+        // console.log(correctResponse.indexOf('e'));
+        // check for scientific notation
+        if (correctResponse.indexOf('e') >= 0) {
+            // console.log('scientific');
+            return true;
+        } else if (correctResponse.indexOf('e') === -1) {
+            // console.log('not scientific');
+            return false;
         }
     }
 
@@ -168,7 +186,7 @@ const UnitConverter = ({ library }) => {
             case ('correct'):
                 return <div className='message correct'><p>Correct!</p></div>
             case ('incorrect'):
-                return <div className='message incorrect'><p>Sorry, Incorrect</p></div>
+                return <div className='message incorrect'><p>Incorrect: Solution {correctAnswer}</p></div>
             case ('belowZero'):
                 return <div className='message parameters'><p>Below Absolute Zero</p></div>
             case ('negativeVolume'):
@@ -181,7 +199,7 @@ const UnitConverter = ({ library }) => {
 
     // unit conversion functions
     function convertTemperatures() {
-        console.log('converting temperatures');
+        // console.log('converting temperatures');
         const { promptNum, startUnit, targetUnit } = questionInputs;
         const stringEquation = conversions[`${startUnit}`][`${targetUnit}`]; // get string equation
         const equationFunction = new Function('x', `return ${stringEquation}`); // function constructor
@@ -190,7 +208,7 @@ const UnitConverter = ({ library }) => {
     }
 
     function convertVolumes() {
-        console.log('converting volume');
+        // console.log('converting volume');
         const { promptNum, startUnit, targetUnit } = questionInputs;
         const correctVolume = Number(promptNum) * conversions[`${startUnit}`][`${targetUnit}`];
         return correctVolume;
@@ -215,7 +233,7 @@ const UnitConverter = ({ library }) => {
             <form className='conversionForm'>
                 <div className='inputField'>
                     <ValueInput
-                        setFunction={handleInputChanges}
+                        setFunction={(e) => handleInputChanges(e)}
                         keyPair={'promptNum'}
                         value={questionInputs.promptNum}
                         placeholder={'Value'}
@@ -226,7 +244,7 @@ const UnitConverter = ({ library }) => {
                         units={units}
                         value={questionInputs.startUnit}
                         keyPair={'startUnit'}
-                        setFunction={handleInputChanges}
+                        setFunction={(e) => handleInputChanges(e)}
                     />
                 </div>
                 <div className='inputField arrows'>
@@ -237,7 +255,7 @@ const UnitConverter = ({ library }) => {
                         units={units}
                         value={questionInputs.targetUnit}
                         keyPair={'targetUnit'}
-                        setFunction={handleInputChanges}
+                        setFunction={(e) => handleInputChanges(e)}
                     />
                 </div>
                 <div className='inputField'>
@@ -249,9 +267,6 @@ const UnitConverter = ({ library }) => {
                         onChange={(e) => submitConversion(e, questionInputs.promptNum, questionInputs.startUnit, questionInputs.targetUnit)}
                         className='textField'
                     />
-                </div>
-                <div className='inputField solution'>
-                    <p>Solution: {correctAnswer}</p>
                 </div>
                 <div className='screenMessageDiv'>
                     {generateScreenMessage()}
