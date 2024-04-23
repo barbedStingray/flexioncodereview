@@ -40,8 +40,8 @@ const UnitConverter = ({ library }) => {
             return;
         }
 
-        const adjustedCorrectResponse = adjustCorrectResponseLength(correctResponse);
-        const studentNumber = adjustCorrectResponseLength(studentString);
+        const adjustedCorrectResponse = adjustCorrectResponseLength(correctResponse, title);
+        const studentNumber = adjustCorrectResponseLength(studentString, title);
 
         setCorrectAnswer(adjustedCorrectResponse);
         return setScreenDisplay(Number(studentNumber) === Number(adjustedCorrectResponse) ? 'correct' : 'incorrect');
@@ -102,15 +102,15 @@ const UnitConverter = ({ library }) => {
         // add more units here
     }
 
-    function adjustCorrectResponseLength(correctResponse) {
+    function adjustCorrectResponseLength(correctResponse, title) {
         let response = Number(correctResponse)
         let numberAdjust;
 
-        if (response < 0.05) {
+        if (response < 0.05 && title === 'Volume') {
             numberAdjust = response.toExponential(1);
             return numberAdjust;
 
-        } else if (response > 999999) {
+        } else if (response > 999999 && title === 'Volume') {
             numberAdjust = response.toExponential(1);
             return numberAdjust;
 
