@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import UnitConverter from './UnitConverter';
+import axios from 'axios';
 import './App.css';
 
 
@@ -61,6 +62,7 @@ function App() {
       'Gallons',
       'Liters',
       'Tablespoons'
+      // teaspoons
     ],
     conversions: {
       CubicFeet: {
@@ -121,6 +123,15 @@ function App() {
       Tablespoons: 0,
     }
   };
+
+  function serverTest() {
+    console.log('lets test the server');
+    axios.get('/api/conversion').then((result) => {
+      console.log('server functional');
+    }).catch((error) => {
+      console.log('server error' ,error);
+    });
+  }
   
   return (
     <div className="flexionCodeReview">
@@ -149,6 +160,8 @@ function App() {
           />
         }
       </div>
+
+      <button onClick={serverTest}>SERVER</button>
 
     </div >
   );
