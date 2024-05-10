@@ -30,7 +30,6 @@ const UnitConverter = ({ library }) => {
         if (!inputsAreValid(promptNum, studentString, startUnit, targetUnit)) {
             return;
         }
-
         let correctResponse = processCorrectResponse(title);
 
         const validatedUnit = validateUnitParameter(correctResponse);

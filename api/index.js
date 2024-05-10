@@ -4,17 +4,16 @@ require('dotenv').config();
 const path = require('path');
 
 
-// * router variables if necessary
+// router variables
 const conversionRouter = require('./routes/conversion.router.js');
 
 // Middleware
 app.use(express.json()); // axios requests
 
-// * Express Routes if necessary 
+// Express Routes  
 app.use('/api/conversion', conversionRouter);
 
-
-console.log('server is running!');
+console.log('the server is running!');
 
 
 // Serve the static files

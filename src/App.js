@@ -3,7 +3,8 @@ import UnitConverter from './UnitConverter';
 import axios from 'axios';
 import './App.css';
 
-
+import unitLibrary from './Scripts/unitLibrary';
+console.log('unitLibrary', unitLibrary);
 function App() {
 
   const [display, setDisplay] = useState('Temperature');
@@ -126,8 +127,12 @@ function App() {
 
   function serverTest() {
     console.log('lets test the server');
-    axios.get('/api/conversion').then((result) => {
-      console.log('server functional');
+
+    // const testData = {unit: 'Temperature', startValue: 32, startUnit: 'Celsius', targetUnit: 'Fahrenheit'}
+    const testData = {unit: 'Volume', startValue: 32, startUnit: '', targetUnit: 'Cups'}
+    // console.log('testDAta', testData);
+    axios.post('/api/conversion', testData).then((result) => {
+      console.log('server response', result);
     }).catch((error) => {
       console.log('server error' ,error);
     });
