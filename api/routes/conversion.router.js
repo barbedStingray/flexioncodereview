@@ -10,7 +10,7 @@ const validateInputs = require('../../src/Scripts/validateInputs.js');
 router.post('/', (req, res) => {
     console.log('This is the Conversion!');
     const { unit, startValue, startUnit, targetUnit } = req.body;
-    // console.log('values', startValue, startUnit, targetUnit);
+    console.log('values', startValue, startUnit, targetUnit);
 
     // todo validate inputs
     if (!validateInputs(startValue, startUnit, targetUnit)) {
@@ -25,9 +25,12 @@ router.post('/', (req, res) => {
 
     // todo validate unit parameter
 
+
+    // const targetValue = 55
     console.log('targetValue', targetValue);
 
-    res.send('Booyah');
+    // res.send('Booyah');
+    return res.status(201).send(targetValue.toFixed(4));
 })
 
 module.exports = router;
