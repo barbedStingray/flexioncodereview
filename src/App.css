@@ -20,7 +20,7 @@
 }
 
 .flexionCodeReview {
-  border: 2px solid red;
+  /* border: 2px solid red; */
   width: 100dvw;
   height: 100dvh;
   display: flex;
