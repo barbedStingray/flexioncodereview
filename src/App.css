@@ -103,7 +103,8 @@
 }
 
 .textField {
-  width: 45%;
+  /* border: 2px solid white; */
+  width: 75%;
   min-width: 80px;
   box-shadow: 0 0 5px black inset;
   font-size: 3.25vh;
